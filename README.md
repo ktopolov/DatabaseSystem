@@ -39,4 +39,13 @@ ssh-add ~/.ssh/<private_key_name>
 To add to GitHub, go to "Settings >> SSH and GPG Keys >> New SSH Key". Give the key an informative title. Then, paste the contents of the **public key** into the box.
 ![image](https://user-images.githubusercontent.com/25532284/124362413-969f4e00-dc02-11eb-8e39-dfafe90231f1.png)
 
+To verify the connection between your SSH agent and GitHub, use:
+```
+ssh -T git@github.com
+```
+I see:
+```
+Hi ktopolov! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
 
