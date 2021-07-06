@@ -13,14 +13,15 @@ Person::Person(int age, std::string firstName, std::string lastName, std::vector
 
 void Person::printInfo()
 {
-	std::cout << "First Name: " << this->firstName << std::endl;
-	std::cout << "Last Name: " << this->lastName << std::endl;
-	std::cout << "Age: " << this->age << std::endl;
-	std::cout << "Courses: " << std::endl;
+	std::cout << "First Name: " << this->firstName;
+	std::cout << "   Last Name: " << this->lastName;
+	std::cout << "   Age: " << this->age;
+	std::cout << "   Courses: ";
 	for(std::string str : this->classNames)
 	{
-		std::cout << "\t" << str << std::endl;
+		std::cout << "   " << str;
 	}
+	std::cout << std::endl;
 }
 
 int Person::getAge()

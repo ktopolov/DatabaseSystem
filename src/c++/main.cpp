@@ -24,7 +24,6 @@ int main(int argc, char** argv)
 	for (int i = 0; i < argc; ++i)
 	{
 		temp = std::string(argv[i]);
-		std::cout << temp << std::endl;
 		if (temp == "-f")
 		{
 			filename = std::string(argv[i + 1]);
@@ -32,30 +31,33 @@ int main(int argc, char** argv)
 		}
 	}
 
-	// Temporary variables
-	int age;
-	std::string firstName;
-	std::string lastName ;
-	std::vector<std::string> classNames;
-
 	// Read file line by line
 	std::ifstream infile(filename);
 	std::string str;
+	
+	// Temp Vars
+	int age;
+	std::string firstName;
+	std::string lastName;
+	std::vector<std::string> classNames;
+
 	while (std::getline(infile, str))
 	{
 		// Split at the commas, remove spaces
 		str.erase(std::remove(str.begin(), str.end(), ' '), str.end()); // remove spaces
 		std::vector<std::string> parsed = split(str, ',');
 
+		age = std::stoi(parsed[2]);
 		firstName = parsed[0];
 		lastName = parsed[1];
-		age = stoi(parsed[2]);
-		classNames = std::vector<std::string> {"ECE580", "ECE591"};
+		std::vector<std::string> classNames;
+		for (int i = 3; i < parsed.size(); i++)
+			classNames.push_back(parsed[i]);
 
 		Person NewPerson(age, firstName, lastName, classNames);
 		NewPerson.printInfo();
 	}
-	
+
 	return 0;
 }
 
