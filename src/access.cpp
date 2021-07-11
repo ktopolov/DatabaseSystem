@@ -4,21 +4,37 @@
 #include <fstream>
 #include <ctime>
 #include <cstdlib>
+#include <iomanip>
 
 #include <parse.h>
 
 CliParser getInput(int argc, char *argv[], bool isPrint);
-void addAccount(std::string first, std::string last, float amount);
+void addAccount(std::string file, std::string first, std::string last, float amount);
 
 int main(int argc, char *argv[])
-// Command line args include:
-// -i : Input file path
-// -o : Output file path
+/* Run application
+
+argc : number of input command line args
+	argv : command line args as char arrays. Can be any of:
+		-f : Database CSV filepath
+		-a : Action to take. Can be:
+			add: Add a person; REQUIRES --first, --last; OPTIONAL --amount
+			rmv: Remove a person; REQUIRES --id
+			upd: Update a person's account. REQUIRES --id, --amount
+		--first : first name
+		--last : last name
+		--amount : dollar amount change from previous balance. If adding person,
+				   this is initial balance.
+
+Example: From top level of repo:
+	./build/Access -f ~/projects/database/db.csv -a add --first John --last Jones --amount 20.0
+*/
 {
 	// Parse CLI arguments
 	CliParser Parser = getInput(argc, argv, false);
+	std::string action = Parser.getArg("-a");
+	std::string file =  Parser.getArg("-f");
 
-	std::string action =  Parser.getArg("-a");
 	if (action == "add"){
 		std::string first = Parser.getArg("--first");
 		std::string last = Parser.getArg("--last");
@@ -28,7 +44,7 @@ int main(int argc, char *argv[])
 		if (last.empty()){ std::cerr << "--last required" << std::endl; }
 		if (amount.empty()){ std::cerr << "--amount required" << std::endl; }
 
-		addAccount(first, last, std::stof(amount));
+		addAccount(file, first, last, std::stof(amount));
 	}
 	else if (action == "rmv"){
 		std::cout << "Must remove account #" << Parser.getArg("--id") << std::endl;
@@ -43,10 +59,11 @@ int main(int argc, char *argv[])
 		std::cout << "upd: Update a person's account. REQUIRES --id, --amount" << std::endl;
 	}
 
-	/*
 	// Read in CSV
 	std::string line;
-	std::ifstream inFile(Parser.getArg("-i"));
+	std::ifstream inFile(Parser.getArg("-f"));
+	std::cout << "Attempting to open file " << Parser.getArg("-f") << std::endl;
+
 	if (inFile.is_open()) {
 		while (std::getline(inFile, line)) {
 			std::cout << line << std::endl;
@@ -57,16 +74,6 @@ int main(int argc, char *argv[])
 		std::cout << "Unable to open file" << std::endl;
 	}
 
-	// Construct graph of nodes
-
-	// Train
-
-	// Output weights to file
-	std::ofstream outFile(Parser.getArg("-o"));
-  	outFile << "Writing this to a file.\n";
-	outFile.close();
-	std::cout << "Output written to " << Parser.getArg("-o") << std::endl;
-	*/
 	return 0;
 }
 
@@ -75,6 +82,7 @@ CliParser getInput(int argc, char *argv[], bool isPrint){
 
 	argc : number of input command line args
 	argv : command line args as char arrays. Can be any of:
+		-f : Filepath to CSV database
 		-a : Action to take. Can be:
 			add: Add a person; REQUIRES --first, --last; OPTIONAL --amount
 			rmv: Remove a person; REQUIRES --id
@@ -89,13 +97,14 @@ CliParser getInput(int argc, char *argv[], bool isPrint){
 	CliParser Parser;
 
 	// Possible actions
-	Parser.configureArg("-a");  // add person
+	Parser.configureArg("-a");
+	Parser.configureArg("-f");
 
 	// Additional args
-	Parser.configureArg("--first", "");  // first name; needed for -a
-	Parser.configureArg("--last", "");  // last name; needed for -a
-	Parser.configureArg("--amount", "");  // dollar amount change; needed for -a, -u
-	Parser.configureArg("--id", "");  // 4-digit ID number, needed for -u, -r
+	Parser.configureArg("--first", "");
+	Parser.configureArg("--last", "");
+	Parser.configureArg("--amount", "");
+	Parser.configureArg("--id", "");
 
 	// Parse
 	Parser.parseArgs(argc, argv);
@@ -107,17 +116,19 @@ CliParser getInput(int argc, char *argv[], bool isPrint){
 	return Parser;
 }
 
-void addAccount(std::string first, std::string last, float amount){
+void addAccount(std::string file, std::string first, std::string last, float amount){
 	/* Add new account
+	file : database CSV file to add to
 	first : First name
 	last : Last name
 	amount : Initial investment
 	*/
 	unsigned randSeed = time(NULL);
 		srand(randSeed);
-	int id = rand();
+	int id = rand() % 10000; // number between 0 and 9999
 
 	// TODO-Write to file
-
-	std::cout << "Added " << first << " " << last << " with $" << amount << " and Account #" << id << std::endl;
+	std::ofstream outFile(file, std::ios::app); // append mode
+	outFile << id << ", " << first << ", " << last << ", " << amount;
+	outFile.close();
 }
