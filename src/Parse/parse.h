@@ -4,7 +4,6 @@
 class CliParser {
 	private:
    		std::map<std::string, std::string> cliArgs;
-		void setArg(std::string inFlag, std::string argument);
 
 	public:
 		void configureArg(std::string inFlag);
