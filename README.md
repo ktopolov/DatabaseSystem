@@ -1,5 +1,5 @@
-# DatabaseSystem
-Multi-language development project to get used to Linux-based C++, Python development as well as Git  
+# Multi-Language Project  
+The name of this repo is misleading (based on what I initially was going to do). This is simply a repository where the amount of code will be lightweight, but I will be practicing using multiple development languages, including compiled vs. scripting languages. This is a multi-language development project to get used to Linux-based C++, Python development as well as Git.  
   
 # Dependencies  
 This repo is build around the Caffe framework. To install Caffe in Linux, use:  
