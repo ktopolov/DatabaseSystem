@@ -2,7 +2,24 @@
 The name of this repo is misleading (based on what I initially was going to do). This is simply a repository where the amount of code will be lightweight, but I will be practicing using multiple development languages, including compiled vs. scripting languages. This is a multi-language development project to get used to Linux-based C++, Python development as well as Git.  
   
 # Dependencies  
-There are a few dependencies for this repo; one of which is OpenCV for C++. To install for Linux (or WSL), follow http://www.codebind.com/cpp-tutorial/install-opencv-ubuntu-cpp/.
+There are a few dependencies for this repo; one of which is OpenCV for C++. To install:
+```
+# Install minimal prerequisites (Ubuntu 18.04 as reference)
+sudo apt update && sudo apt install -y cmake g++ wget unzip
+
+# Download and unpack sources
+wget -O opencv.zip https://github.com/opencv/opencv/archive/4.x.zip
+unzip opencv.zip
+
+# Create build directory
+mkdir -p build && cd build
+
+# Configure
+cmake  ../opencv-4.x
+
+# Build
+cmake --build .
+```
 
 This repo is build around the Caffe framework. To install Caffe in Linux, use:  
 ```
